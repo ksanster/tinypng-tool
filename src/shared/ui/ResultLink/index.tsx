@@ -23,13 +23,13 @@ export const ResultLink = ({
   onReset,
 }: ResultLinkProps) => {
   const [imageLoaded, setImageLoaded] = useState(false);
-  const filename = useFileStore((z) => z.fileName)
+  const filename = useFileStore((z) => z.fileName);
 
   const handleDownload = () => {
     if (resultUrl && filename) {
-      downloadImage(resultUrl, filename).catch((error) => console.log(error))
+      downloadImage(resultUrl, filename).catch((error) => console.log(error));
     }
-  }
+  };
 
   if (loading) {
     return (

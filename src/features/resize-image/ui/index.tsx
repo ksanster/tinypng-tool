@@ -1,4 +1,12 @@
-import { Button, Card, Form, InputNumber, Select, Space, Typography } from 'antd';
+import {
+  Button,
+  Card,
+  Form,
+  InputNumber,
+  Select,
+  Space,
+  Typography,
+} from 'antd';
 import { useState } from 'react';
 import { ResultLink } from '@shared/ui';
 import { resizeMethods } from '../config';
@@ -118,5 +126,5 @@ export const ResizeImage = () => {
         onReset={handleReset}
       />
     </div>
-  )
-}
+  );
+};

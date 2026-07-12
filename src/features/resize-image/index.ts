@@ -1,1 +1,1 @@
-export { ResizeImage } from './ui'
+export { ResizeImage } from './ui';

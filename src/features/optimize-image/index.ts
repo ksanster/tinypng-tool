@@ -1,1 +1,1 @@
-export { OptimizeImage } from './ui'
+export { OptimizeImage } from './ui';

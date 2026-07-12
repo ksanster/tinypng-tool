@@ -1,2 +1,2 @@
 export * from './types';
-export { useFileStore } from './useFileStore'
+export { useFileStore } from './useFileStore';

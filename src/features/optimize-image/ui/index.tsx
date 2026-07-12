@@ -4,11 +4,11 @@ import { useFileStore } from '@shared/model';
 
 const { Title, Paragraph } = Typography;
 export const OptimizeImage = () => {
-  const { location, uploadError, isLoading, clear } = useFileStore()
+  const { location, uploadError, isLoading, clear } = useFileStore();
 
   const handleReset = () => {
-    clear()
-  }
+    clear();
+  };
 
   return (
     <Flex vertical>
@@ -24,7 +24,6 @@ export const OptimizeImage = () => {
         loading={isLoading}
         onReset={handleReset}
       />
-
     </Flex>
-  )
-}
+  );
+};

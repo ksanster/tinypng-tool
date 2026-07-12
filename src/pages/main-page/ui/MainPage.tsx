@@ -7,7 +7,7 @@ import { useFileStore } from '@shared/model';
 const { Content } = Layout;
 export const MainPage = () => {
   const [activeTab, setActiveTab] = useState('optimize');
-  const { fileName, isLoading, uploadError } = useFileStore()
+  const { fileName, isLoading, uploadError } = useFileStore();
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
@@ -23,8 +23,12 @@ export const MainPage = () => {
           }}
         >
           <Card>
-            {(fileName && !isLoading && !uploadError) ? (
-              <Flex vertical className="file-upload-container" style={{width: 560}}>
+            {fileName && !isLoading && !uploadError ? (
+              <Flex
+                vertical
+                className="file-upload-container"
+                style={{ width: 560 }}
+              >
                 <Typography.Title level={3}>Файл загружен</Typography.Title>
                 <Flex justify="center">
                   <Tag>{fileName}</Tag>
@@ -44,6 +48,5 @@ export const MainPage = () => {
         </Flex>
       </Content>
     </Layout>
-  )
-
+  );
 };

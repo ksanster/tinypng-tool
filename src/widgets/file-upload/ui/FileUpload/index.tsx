@@ -20,7 +20,8 @@ export const FileUpload = ({
   accept = 'image/jpeg, image/png, image/webp',
   maxSize = 10,
 }: FileUploadProps) => {
-  const { setError, uploadError, isLoading, uploadComplete, startUpload } = useFileStore()
+  const { setError, uploadError, isLoading, uploadComplete, startUpload } =
+    useFileStore();
 
   const beforeUpload = (file: File) => {
     const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
@@ -47,7 +48,7 @@ export const FileUpload = ({
         setError('Ошибка загрузки файла. Попробуйте снова.');
         break;
       case 'done':
-        console.log('file uploaded')
+        console.log('file uploaded');
         break;
     }
   };
@@ -57,7 +58,7 @@ export const FileUpload = ({
     onSuccess,
     onError,
   }: CustomRequestOptions) => {
-    startUpload((file as File).name)
+    startUpload((file as File).name);
     try {
       const response = await fetch(`${API_URL}/api/shrink`, {
         method: 'POST',
@@ -69,11 +70,11 @@ export const FileUpload = ({
       });
 
       if (response.ok) {
-        const location = response.headers.get('location')
+        const location = response.headers.get('location');
         if (location) {
-          uploadComplete(location)
+          uploadComplete(location);
         } else {
-          setError('No location in response')
+          setError('No location in response');
         }
         const result = await response.json();
         onSuccess?.(result);
@@ -98,7 +99,7 @@ export const FileUpload = ({
 
   return (
     <Flex vertical className="file-upload-container">
-      <Dragger {...uploadProps} >
+      <Dragger {...uploadProps}>
         <div className="ant-upload-drag-icon">
           <InboxOutlined style={{ fontSize: 48 }} />
         </div>

@@ -30,7 +30,7 @@ export const useFileStore = create<FileStore & Actions>((set) => ({
     set({ isLoading: true, fileName, uploadError: '' });
   },
   uploadComplete: (location) => {
-    console.log('Upload complete ' + location)
+    console.log('Upload complete ' + location);
     set({ location, isLoading: false });
   },
   clear: () => {
