@@ -1,8 +1,7 @@
-import { API_URL } from '@shared/api';
+import { translateLocation } from '@shared/lib';
 
 export const downloadImage = async (src: string, filename: string) => {
-  const downloadUrl = `${API_URL}${new URL(src).pathname}`;
-  console.log(downloadUrl);
+  const downloadUrl = translateLocation(src);
   const response = await fetch(downloadUrl);
   const blob = await response.blob();
   const url = window.URL.createObjectURL(blob);

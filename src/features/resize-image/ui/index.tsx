@@ -49,6 +49,8 @@ export const ResizeImage = () => {
     clear()
   };
 
+  const showForm = Boolean(location && !resultUrl)
+
   return (
     <div style={{ maxWidth: 800, margin: '0 auto', padding: '24px 0' }}>
       <Title level={2}>Изменение размеров изображений</Title>
@@ -57,7 +59,7 @@ export const ResizeImage = () => {
         обработки для получения нужного результата.
       </Paragraph>
 
-      {location && (
+      {showForm && (
         <Card style={{ marginTop: 24 }}>
           <Form form={form} layout="vertical" initialValues={{ method: 'fit' }}>
             <Space size="large" style={{ width: '100%' }}>
