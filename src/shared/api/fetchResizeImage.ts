@@ -1,0 +1,1 @@
+export const fetchResizeImage = async () => {};
