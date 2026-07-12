@@ -10,29 +10,29 @@ import {
 import { useState } from 'react';
 import { ResultLink } from '@shared/ui';
 import { resizeMethods } from '../config';
+import { useFileStore } from '@shared/model';
+import { fetchResizeImage } from '@shared/api';
 
 const { Title, Paragraph } = Typography;
 
 export const ResizeImage = () => {
+  const { location, isLoading, clear } = useFileStore();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [resultUrl, setResultUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const handleProcess = async () => {
-    if (!selectedFile) return;
-
-    // const values = await form.validateFields();
-    // const { width, height, method } = values;
+    const values = await form.validateFields();
+    const { width, height, method } = values;
 
     setLoading(true);
     setError(null);
     setResultUrl(null);
 
     try {
-      // const url = await resizeImage(selectedFile, width, height, method);
-      // setResultUrl(url);
+      const url = await fetchResizeImage(location!, {width, height, method});
+      setResultUrl(url);
     } catch (err: unknown) {
       setError(
         err instanceof Error ? err.message : 'Произошла неизвестная ошибка'
@@ -44,9 +44,9 @@ export const ResizeImage = () => {
 
   const handleReset = () => {
     form.resetFields();
-    setSelectedFile(null);
     setResultUrl(null);
     setError(null);
+    clear()
   };
 
   return (
@@ -57,7 +57,7 @@ export const ResizeImage = () => {
         обработки для получения нужного результата.
       </Paragraph>
 
-      {selectedFile && (
+      {location && (
         <Card style={{ marginTop: 24 }}>
           <Form form={form} layout="vertical" initialValues={{ method: 'fit' }}>
             <Space size="large" style={{ width: '100%' }}>
@@ -110,7 +110,7 @@ export const ResizeImage = () => {
                 type="primary"
                 onClick={handleProcess}
                 loading={loading}
-                disabled={!selectedFile}
+                disabled={!location}
               >
                 Изменить размеры
               </Button>
@@ -122,7 +122,7 @@ export const ResizeImage = () => {
       <ResultLink
         resultUrl={resultUrl}
         error={error}
-        loading={loading}
+        loading={loading || isLoading}
         onReset={handleReset}
       />
     </div>
