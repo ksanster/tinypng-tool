@@ -2,29 +2,32 @@ import { Button, Card, Form, Select, Typography } from 'antd';
 import { useState } from 'react';
 import { formatOptions } from '../config';
 import { ResultLink } from '@shared/ui';
+import { type ImageFormat, useFileStore } from '@shared/model';
+import { fetchConvertImage } from '@shared/api';
 
 const { Title, Paragraph } = Typography;
 
 export const ConvertImage = () => {
+  const { location, isLoading, clear } = useFileStore();
+
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
+  const [fileType, setFileType] = useState<ImageFormat | undefined>();
   const [resultUrl, setResultUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const handleProcess = async () => {
-    if (!selectedFile) return;
+    const values = await form.validateFields();
+    const { type } = values;
 
-    // const values = await form.validateFields();
-    // const { target } = values;
-
+    setFileType(type);
     setLoading(true);
     setError(null);
     setResultUrl(null);
 
     try {
-      // const url = await convertImage(selectedFile, target);
-      // setResultUrl(url);
+      const url = await fetchConvertImage(location!, type);
+      setResultUrl(url);
     } catch (err: unknown) {
       setError(
         err instanceof Error ? err.message : 'Произошла неизвестная ошибка'
@@ -36,10 +39,12 @@ export const ConvertImage = () => {
 
   const handleReset = () => {
     form.resetFields();
-    setSelectedFile(null);
     setResultUrl(null);
     setError(null);
+    clear();
   };
+
+  const showForm = Boolean(location && !resultUrl);
 
   return (
     <div style={{ maxWidth: 800, margin: '0 auto', padding: '24px 0' }}>
@@ -49,12 +54,12 @@ export const ConvertImage = () => {
         файл в выбранный формат.
       </Paragraph>
 
-      {selectedFile && (
+      {showForm && (
         <Card style={{ marginTop: 24 }}>
           <Form form={form} layout="vertical">
             <Form.Item
               label="Целевой формат"
-              name="target"
+              name="type"
               rules={[{ required: true, message: 'Выберите формат' }]}
             >
               <Select options={formatOptions} />
@@ -64,7 +69,7 @@ export const ConvertImage = () => {
                 type="primary"
                 onClick={handleProcess}
                 loading={loading}
-                disabled={!selectedFile}
+                disabled={!location}
               >
                 Конвертировать
               </Button>
@@ -75,8 +80,9 @@ export const ConvertImage = () => {
 
       <ResultLink
         resultUrl={resultUrl}
+        fileType={fileType}
         error={error}
-        loading={loading}
+        loading={loading || isLoading}
         onReset={handleReset}
       />
     </div>

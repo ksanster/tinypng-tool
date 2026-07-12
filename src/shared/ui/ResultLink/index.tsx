@@ -6,18 +6,20 @@ import {
   CheckCircleOutlined,
   ReloadOutlined,
 } from '@ant-design/icons';
-import { useFileStore } from '@shared/model';
-import { downloadImage } from '@shared/lib';
+import { type ImageFormat, useFileStore } from '@shared/model';
+import { downloadImage, getResultFilename } from '@shared/lib';
 
 interface ResultLinkProps {
   resultUrl: string | null;
   error: string | null;
   loading: boolean;
   onReset: () => void;
+  fileType?: ImageFormat;
 }
 
 export const ResultLink = ({
   resultUrl,
+  fileType,
   error,
   loading,
   onReset,
@@ -27,7 +29,9 @@ export const ResultLink = ({
 
   const handleDownload = () => {
     if (resultUrl && filename) {
-      downloadImage(resultUrl, filename).catch((error) => console.log(error));
+      downloadImage(resultUrl, getResultFilename(filename, fileType)).catch(
+        (error) => console.log(error)
+      );
     }
   };
 

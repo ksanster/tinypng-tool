@@ -31,7 +31,11 @@ export const ResizeImage = () => {
     setResultUrl(null);
 
     try {
-      const url = await fetchResizeImage(location!, {width, height, method});
+      const url = await fetchResizeImage(location!, {
+        method,
+        ...(width && { width }),
+        ...(height && { height }),
+      });
       setResultUrl(url);
     } catch (err: unknown) {
       setError(
@@ -46,10 +50,10 @@ export const ResizeImage = () => {
     form.resetFields();
     setResultUrl(null);
     setError(null);
-    clear()
+    clear();
   };
 
-  const showForm = Boolean(location && !resultUrl)
+  const showForm = Boolean(location && !resultUrl);
 
   return (
     <div style={{ maxWidth: 800, margin: '0 auto', padding: '24px 0' }}>
@@ -67,10 +71,17 @@ export const ResizeImage = () => {
                 label="Ширина (px)"
                 name="width"
                 rules={[
-                  {
-                    required: true,
-                    message: 'Введите ширину',
-                  },
+                  (formInstance) => ({
+                    message:
+                      'Должно быть задано хотя бы одно значениеЦ: ширина или высота ',
+                    validator(_, value) {
+                      const heightValue = formInstance.getFieldValue('height');
+                      if (heightValue === undefined && value === undefined) {
+                        return Promise.reject(new Error('Введите значение'));
+                      }
+                      return Promise.resolve();
+                    },
+                  }),
                 ]}
                 style={{ flex: 1 }}
               >
@@ -85,10 +96,17 @@ export const ResizeImage = () => {
                 label="Высота (px)"
                 name="height"
                 rules={[
-                  {
-                    required: true,
-                    message: 'Введите высоту',
-                  },
+                  (formInstance) => ({
+                    message:
+                      'Должно быть задано хотя бы одно значениеЦ: ширина или высота ',
+                    validator(_, value) {
+                      const widthValue = formInstance.getFieldValue('width');
+                      if (widthValue === undefined && value === undefined) {
+                        return Promise.reject(new Error('Введите значение'));
+                      }
+                      return Promise.resolve();
+                    },
+                  }),
                 ]}
                 style={{ flex: 1 }}
               >
